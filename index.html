@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Library System</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background: #0f172a;
+    color: #e2e8f0;
+}
+
+/* LAYOUT */
+.wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 220px;
+    background: #020617;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar h2 {
+    margin-bottom: 20px;
+    color: #38bdf8;
+}
+
+.sidebar button {
+    background: none;
+    border: none;
+    color: #cbd5f5;
+    text-align: left;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.sidebar button:hover {
+    background: #1e293b;
+}
+
+.content {
+    flex: 1;
+    padding: 30px;
+}
+
+/* CARDS */
+.card {
+    background: #020617;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.hidden { display: none; }
+
+h1, h2 {
+    color: #f1f5f9;
+    margin-bottom: 10px;
+}
+
+/* INPUTS */
+label {
+    display: block;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #94a3b8;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    background: #020617;
+    border: 1px solid #1e293b;
+    border-radius: 6px;
+    color: white;
+}
+
+button.primary {
+    margin-top: 15px;
+    background: #38bdf8;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button.primary:hover {
+    background: #0ea5e9;
+}
+
+/* ITEMS */
+.item {
+    padding: 12px;
+    border-bottom: 1px solid #1e293b;
+}
+
+.ok { color: #22c55e; }
+.warn { color: #f87171; }
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="login" class="content">
+    <div class="card" style="max-width:400px;margin:auto;">
+        <h1>📚 Biblioteca</h1>
+
+        <label>Email</label>
+        <input placeholder="ex: usuario@email.com">
+
+        <label>Senha</label>
+        <input type="password" placeholder="••••••">
+
+        <label>Perfil</label>
+        <select id="perfil">
+            <option value="usuario">Associado</option>
+            <option value="bibliotecario">Bibliotecário</option>
+        </select>
+
+        <button class="primary" onclick="login()">Entrar</button>
+    </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="wrapper hidden">
+
+    <div class="sidebar">
+        <h2>📘 Menu</h2>
+
+        <div id="menuUser">
+            <button onclick="show('acervo')">Acervo</button>
+            <button onclick="show('emprestimos')">Empréstimos</button>
+            <button onclick="show('historico')">Histórico</button>
+        </div>
+
+        <div id="menuAdmin" class="hidden">
+            <button onclick="show('cadastroUser')">Cadastrar Usuário</button>
+            <button onclick="show('cadastroLivro')">Cadastrar Item</button>
+            <button onclick="show('gerenciar')">Gerenciar</button>
+        </div>
+
+        <button onclick="logout()">Sair</button>
+    </div>
+
+    <div class="content">
+
+        <!-- ACERVO -->
+        <div id="acervo" class="card hidden">
+            <h2>Acervo</h2>
+
+            <label>Buscar</label>
+            <input placeholder="ex: Java">
+
+            <div class="item">
+                Java Básico<br>
+                <span class="ok">Disponível</span><br>
+                <button class="primary">Solicitar</button>
+            </div>
+
+            <div class="item">
+                Revista Tech<br>
+                <span class="warn">Indisponível</span><br>
+                <button class="primary">Lista de espera</button>
+            </div>
+        </div>
+
+        <!-- EMPRESTIMOS -->
+        <div id="emprestimos" class="card hidden">
+            <h2>Meus Empréstimos</h2>
+
+            <div class="item">
+                Java Básico<br>
+                <span class="ok">Normal</span>
+            </div>
+
+            <div class="item">
+                Banco de Dados<br>
+                <span class="warn">Atraso / Multa</span>
+            </div>
+        </div>
+
+        <!-- HISTÓRICO -->
+        <div id="historico" class="card hidden">
+            <h2>Histórico</h2>
+
+            <div class="item">
+                <b>Java Básico</b><br>
+                Devolvido em: 10/03<br>
+                <span class="ok">✔ Sem atraso</span>
+            </div>
+
+            <div class="item">
+                <b>Banco de Dados</b><br>
+                Devolvido em: 15/03<br>
+                <span class="warn">✔ Com atraso (multa paga)</span>
+            </div>
+        </div>
+
+        <!-- GERENCIAR -->
+        <div id="gerenciar" class="card hidden">
+            <h2>Gerenciar</h2>
+
+            <label>Associado</label>
+            <input placeholder="ex: João">
+
+            <div class="item">
+                Java Básico<br>
+                <button class="primary">Devolver</button>
+            </div>
+        </div>
+
+        <!-- CADASTROS -->
+        <div id="cadastroUser" class="card hidden">
+            <h2>Novo Usuário</h2>
+
+            <label>Nome</label>
+            <input placeholder="ex: João">
+
+            <label>Email</label>
+            <input placeholder="ex: joao@email.com">
+
+            <button class="primary">Salvar</button>
+        </div>
+
+        <div id="cadastroLivro" class="card hidden">
+            <h2>Cadastrar</h2>
+
+            <label>Tipo</label>
+            <select id="tipo" onchange="trocar()">
+                <option value="livro">Livro</option>
+                <option value="revista">Revista</option>
+            </select>
+
+            <div id="livro">
+                <label>Título</label>
+                <input placeholder="ex: Java">
+            </div>
+
+            <div id="revista" class="hidden">
+                <label>Título</label>
+                <input placeholder="ex: Tech">
+            </div>
+
+            <button class="primary">Salvar</button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+function login() {
+    let perfil = document.getElementById("perfil").value;
+    document.getElementById("login").classList.add("hidden");
+    document.getElementById("app").classList.remove("hidden");
+
+    document.getElementById("menuUser").classList.toggle("hidden", perfil !== "usuario");
+    document.getElementById("menuAdmin").classList.toggle("hidden", perfil !== "bibliotecario");
+}
+
+function logout() { location.reload(); }
+
+function show(id) {
+    document.querySelectorAll(".card").forEach(el => el.classList.add("hidden"));
+    document.getElementById(id).classList.remove("hidden");
+}
+
+function trocar() {
+    let tipo = document.getElementById("tipo").value;
+    document.getElementById("livro").classList.toggle("hidden", tipo !== "livro");
+    document.getElementById("revista").classList.toggle("hidden", tipo !== "revista");
+}
+</script>
+
+</body>
+</html>
